@@ -42,7 +42,29 @@
 			<artifactId>jstl</artifactId>
 			<version>1.2</version>
 		</dependency>
- 
+
+			<!-- MongoDB driver -->
+			<dependency>
+				<groupId>org.mongodb</groupId>
+				<artifactId>mongodb-driver</artifactId>
+				<version>3.3.0</version>
+			</dependency>
+
+			<!-- mysql-connector-java -->
+			<dependency>
+				<groupId>mysql</groupId>
+				<artifactId>mysql-connector-java</artifactId>
+				<version>6.0.5</version>
+			</dependency>
+
+			<!-- neo4j-spark-connector -->
+			<dependency>
+				<groupId>org.neo4j.spark</groupId>
+				<artifactId>neo4j-spark-connector</artifactId>
+				<version>1.0.0-RC1</version>
+			</dependency>
+
+
 	</dependencies>
  
   <build>

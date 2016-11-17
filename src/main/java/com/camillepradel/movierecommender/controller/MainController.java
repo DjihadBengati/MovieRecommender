@@ -1,15 +1,14 @@
 package com.camillepradel.movierecommender.controller;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.ArrayList;
+
+import com.camillepradel.movierecommender.databases.MongoDB;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.camillepradel.movierecommender.model.Genre;
 import com.camillepradel.movierecommender.model.Movie;
 
 @Controller
@@ -30,22 +29,24 @@ public class MainController {
 	@RequestMapping("/movies")
 	public ModelAndView showMovies(
 			@RequestParam(value = "user_id", required = false) Integer userId) {
+		ArrayList<Movie> moviesList;
+
+		MongoDB mongodb = new MongoDB();
+		if(userId == null){
+			moviesList = mongodb.getAllMovies();
+			System.out.println(moviesList.size());
+		}
+		else {
+			moviesList = mongodb.getAllMoviesByUserId(userId);
+		}
 		System.out.println("show Movies of user " + userId);
 
 		// TODO: write query to retrieve all movies from DB or all movies rated by user with id userId,
 		// depending on whether or not a value was given for userId
-		List<Movie> movies = new LinkedList<Movie>();
-		Genre genre0 = new Genre(0, "genre0");
-		Genre genre1 = new Genre(1, "genre1");
-		Genre genre2 = new Genre(2, "genre2");
-		movies.add(new Movie(0, "Titre 0", Arrays.asList(new Genre[] {genre0, genre1})));
-		movies.add(new Movie(1, "Titre 1", Arrays.asList(new Genre[] {genre0, genre2})));
-		movies.add(new Movie(2, "Titre 2", Arrays.asList(new Genre[] {genre1})));
-		movies.add(new Movie(3, "Titre 3", Arrays.asList(new Genre[] {genre0, genre1, genre2})));
 
 		ModelAndView mv = new ModelAndView("movies");
 		mv.addObject("userId", userId);
-		mv.addObject("movies", movies);
+		mv.addObject("movies", moviesList);
 		return mv;
 	}
 }

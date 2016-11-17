@@ -5,14 +5,26 @@ pageEncoding="ISO-8859-1"%>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Spring 4 MVC - HelloWorld Index Page</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	<title>BENGATI & BARKOUKI - Projet NoSQL</title>
 </head>
 <body>
  
 	<center>
-		<h2>Hello World</h2>
+		<h2>Hello World !</h2>
+
+		<h3>This is the best Master II ICE NoSQL project</h3>
+        <h3><img width="200px" class="img-circle" src="https://media.licdn.com/mpr/mpr/shrinknp_200_200/AAEAAQAAAAAAAAjZAAAAJGE3NDVlNGYzLTBjODItNDIxYy1hODYwLTBjZmM2MTFiNjc2OQ.jpg" alt="Djihad BENGATI">Djihad BENGATI</h3>
+        <h3><img width="200px" class="img-circle" src="https://scontent-cdg2-1.xx.fbcdn.net/v/t1.0-9/13716040_10210032182343934_2664204668319026172_n.jpg?oh=c263d9eb14c910240203ea5d2d7a5c3a&oe=588C0CA5" alt="Rachid BARKOUKI">Rachid BARKOUKI</h3>
 		<h3>
-			<a href="hello?name=Eric">Click Here</a>
+			<a href="movies">Click Here</a>
 		</h3>
 	</center>
 </body>
