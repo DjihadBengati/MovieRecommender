@@ -4,10 +4,6 @@ package com.camillepradel.movierecommender.databases;
 import com.camillepradel.movierecommender.model.Genre;
 import com.camillepradel.movierecommender.model.Movie;
 import com.mongodb.*;
-import com.mongodb.util.JSON;
-import jdk.nashorn.internal.parser.JSONParser;
-import org.bson.json.JsonMode;
-
 
 import java.util.ArrayList;
 import java.util.List;

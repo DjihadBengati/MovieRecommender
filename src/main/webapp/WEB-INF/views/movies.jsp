@@ -44,7 +44,7 @@
 <div class="col-md-4 scroll">
 
 	<ul>
-		<c:forEach items="${movies}" var="movie">
+		<c:forEach items="${moviesMongoDB}" var="movie">
 			<li>
 					${movie.title}
 				<ul>
@@ -59,7 +59,20 @@
 	</ul>
 </div>
 	<div class="col-md-4 scroll">
-
+		<ul>
+			<c:forEach items="${moviesMySQL}" var="movie">
+				<li>
+						${movie.title}
+					<ul>
+						<c:forEach items="${movie.genres}" var="genre">
+							<li>
+									${genre.name}
+							</li>
+						</c:forEach>
+					</ul>
+				</li>
+			</c:forEach>
+		</ul>
 	</div>
 	<div class="col-md-4 scroll">
 

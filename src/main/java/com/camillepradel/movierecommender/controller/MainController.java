@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.camillepradel.movierecommender.databases.MongoDB;
 
+import com.camillepradel.movierecommender.databases.MySQL;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -14,6 +15,8 @@ import com.camillepradel.movierecommender.model.Movie;
 @Controller
 public class MainController {
 	String message = "Welcome to Spring MVC!";
+	private MongoDB mongodb;
+	private MySQL mysql;
  
 	@RequestMapping("/hello")
 	public ModelAndView showMessage(
@@ -29,16 +32,24 @@ public class MainController {
 	@RequestMapping("/movies")
 	public ModelAndView showMovies(
 			@RequestParam(value = "user_id", required = false) Integer userId) {
-		ArrayList<Movie> moviesList;
+		ArrayList<Movie> moviesMongoDB;
+		ArrayList<Movie> moviesMySQL;
 
-		MongoDB mongodb = new MongoDB();
+
+		mysql = new MySQL();
+		mongodb = new MongoDB();
 		if(userId == null){
-			moviesList = mongodb.getAllMovies();
-			System.out.println(moviesList.size());
+			moviesMongoDB = mongodb.getAllMovies();
+			moviesMySQL = mysql.getAllMovies();
 		}
 		else {
-			moviesList = mongodb.getAllMoviesByUserId(userId);
+			moviesMongoDB = mongodb.getAllMoviesByUserId(userId);
+
+			//TODO : Change mysql.getAllMovies(); to mysql.getAllMoviesByUserId(userId)
+			moviesMySQL = mysql.getAllMovies();
 		}
+
+
 		System.out.println("show Movies of user " + userId);
 
 		// TODO: write query to retrieve all movies from DB or all movies rated by user with id userId,
@@ -46,7 +57,11 @@ public class MainController {
 
 		ModelAndView mv = new ModelAndView("movies");
 		mv.addObject("userId", userId);
-		mv.addObject("movies", moviesList);
+		mv.addObject("moviesMongoDB", moviesMongoDB);
+		mv.addObject("moviesMySQL", moviesMySQL);
+
+
+		mysql.close();
 		return mv;
 	}
 }

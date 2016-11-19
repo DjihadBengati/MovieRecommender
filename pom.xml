@@ -54,14 +54,22 @@
 			<dependency>
 				<groupId>mysql</groupId>
 				<artifactId>mysql-connector-java</artifactId>
-				<version>6.0.5</version>
+				<version>5.1.6</version>
 			</dependency>
 
-			<!-- neo4j-spark-connector -->
+
+		<!-- neo4j-spark-connector -->
 			<dependency>
 				<groupId>org.neo4j.spark</groupId>
 				<artifactId>neo4j-spark-connector</artifactId>
 				<version>1.0.0-RC1</version>
+			</dependency>
+
+			<!-- log4j -->
+			<dependency>
+				<groupId>log4j</groupId>
+				<artifactId>log4j</artifactId>
+				<version>1.2.17</version>
 			</dependency>
 
 

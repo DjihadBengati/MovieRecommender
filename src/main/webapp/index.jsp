@@ -14,6 +14,19 @@ pageEncoding="ISO-8859-1"%>
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 	<title>BENGATI & BARKOUKI - Projet NoSQL</title>
+	<style>
+		body {
+			background-image: url('http://www.votreagencedevoyages.com/wp-content/uploads/2014/03/Illus-plage-flou-e1435928484605.jpg');
+			background-repeat: no-repeat;
+			background-attachment: fixed;
+			background-position: center;
+			margin:0;
+			padding:0;
+			-webkit-background-size: cover; /* pour anciens Chrome et Safari */
+			background-size: cover; /* version standardisée */
+
+		}
+	</style>
 </head>
 <body>
  
