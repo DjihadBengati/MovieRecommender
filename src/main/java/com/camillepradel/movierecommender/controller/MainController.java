@@ -70,6 +70,10 @@ public class MainController {
 		mv.addObject("moviesMySQL", moviesMySQL);
         mv.addObject("moviesNeo4J", moviesNeo4J);
 
+        mv.addObject("moviesMongoDBSize", moviesMongoDB.size());
+        mv.addObject("moviesMySQLSize", moviesMySQL.size());
+        mv.addObject("moviesNeo4JSize", moviesNeo4J.size());
+
 
         // Closing connections
         neo4j.close();

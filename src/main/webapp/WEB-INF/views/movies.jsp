@@ -31,13 +31,13 @@
 </h1></center>
 <div class="col-md-12">
 	<div class="col-md-4">
-		<center><h3><img width="80px" src="http://idelways.developpez.com/news/images/mongodb.png" alt="MongoDB"></h3></center>
+		<center><h3><img width="80px" src="http://idelways.developpez.com/news/images/mongodb.png" alt="MongoDB"><span class="badge">${moviesMongoDBSize}</span></h3></center>
 	</div>
 	<div class="col-md-4">
-		<center><h3><img width="80px" src="https://upload.wikimedia.org/wikipedia/fr/thumb/6/62/MySQL.svg/1280px-MySQL.svg.png" alt="MySQL"></h3></center>
+		<center><h3><img width="80px" src="https://upload.wikimedia.org/wikipedia/fr/thumb/6/62/MySQL.svg/1280px-MySQL.svg.png" alt="MySQL"><span class="badge">${moviesMySQLSize}</span></h3></center>
 	</div>
 	<div class="col-md-4">
-		<center><h3><img width="80px" src="http://info.neo4j.com/rs/773-GON-065/images/neo4j_logo.png" alt="Neo4j"></h3></center>
+		<center><h3><img width="80px" src="http://info.neo4j.com/rs/773-GON-065/images/neo4j_logo.png" alt="Neo4j"><span class="badge">${moviesNeo4JSize}</span></h3></center>
 	</div>
 </div>
 <div class="col-md-12">
