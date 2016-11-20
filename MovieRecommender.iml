@@ -35,7 +35,29 @@
     <orderEntry type="library" name="Maven: org.mongodb:bson:3.3.0" level="project" />
     <orderEntry type="library" name="Maven: org.mongodb:mongodb-driver-core:3.3.0" level="project" />
     <orderEntry type="library" name="Maven: mysql:mysql-connector-java:5.1.6" level="project" />
-    <orderEntry type="library" name="Maven: org.neo4j.spark:neo4j-spark-connector:1.0.0-RC1" level="project" />
-    <orderEntry type="library" name="Maven: log4j:log4j:1.2.17" level="project" />
+    <orderEntry type="library" name="Maven: org.neo4j:neo4j:2.2.0" level="project" />
+    <orderEntry type="library" name="Maven: org.neo4j:neo4j-kernel:2.2.0" level="project" />
+    <orderEntry type="library" name="Maven: org.neo4j:neo4j-primitive-collections:2.2.0" level="project" />
+    <orderEntry type="library" name="Maven: org.neo4j:neo4j-io:2.2.0" level="project" />
+    <orderEntry type="library" name="Maven: org.neo4j:neo4j-csv:2.2.0" level="project" />
+    <orderEntry type="library" name="Maven: org.neo4j:neo4j-lucene-index:2.2.0" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.lucene:lucene-core:3.6.2" level="project" />
+    <orderEntry type="library" name="Maven: org.neo4j:neo4j-graph-algo:2.2.0" level="project" />
+    <orderEntry type="library" name="Maven: org.neo4j:neo4j-udc:2.2.0" level="project" />
+    <orderEntry type="library" name="Maven: org.neo4j:neo4j-graph-matching:2.2.0" level="project" />
+    <orderEntry type="library" name="Maven: org.neo4j:neo4j-cypher:2.2.0" level="project" />
+    <orderEntry type="library" name="Maven: org.neo4j:neo4j-cypher-compiler-1.9:2.0.4" level="project" />
+    <orderEntry type="library" name="Maven: org.neo4j:neo4j-cypher-compiler-2.0:2.0.4" level="project" />
+    <orderEntry type="library" name="Maven: org.neo4j:neo4j-cypher-compiler-2.1:2.1.6" level="project" />
+    <orderEntry type="library" name="Maven: org.neo4j:neo4j-cypher-compiler-2.2:2.2.0" level="project" />
+    <orderEntry type="library" name="Maven: org.scala-lang:scala-reflect:2.10.4" level="project" />
+    <orderEntry type="library" name="Maven: org.parboiled:parboiled-scala_2.10:1.1.6" level="project" />
+    <orderEntry type="library" name="Maven: org.parboiled:parboiled-core:1.1.6" level="project" />
+    <orderEntry type="library" name="Maven: net.sf.opencsv:opencsv:2.3" level="project" />
+    <orderEntry type="library" name="Maven: com.googlecode.concurrentlinkedhashmap:concurrentlinkedhashmap-lru:1.4" level="project" />
+    <orderEntry type="library" name="Maven: org.scala-lang:scala-library:2.10.4" level="project" />
+    <orderEntry type="library" name="Maven: org.neo4j:neo4j-jmx:2.2.0" level="project" />
+    <orderEntry type="library" name="Maven: org.neo4j:neo4j-consistency-check:2.2.0" level="project" />
+    <orderEntry type="library" name="Maven: org.neo4j.driver:neo4j-java-driver:1.0.6" level="project" />
   </component>
 </module>

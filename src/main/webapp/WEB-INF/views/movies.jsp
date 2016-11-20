@@ -75,7 +75,20 @@
 		</ul>
 	</div>
 	<div class="col-md-4 scroll">
-
+		<ul>
+			<c:forEach items="${moviesNeo4J}" var="movie">
+				<li>
+						${movie.title}
+					<ul>
+						<c:forEach items="${movie.genres}" var="genre">
+							<li>
+									${genre.name}
+							</li>
+						</c:forEach>
+					</ul>
+				</li>
+			</c:forEach>
+		</ul>
 	</div>
 </div>
 </body>
