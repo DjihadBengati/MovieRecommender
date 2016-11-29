@@ -17,13 +17,6 @@ public class MongoDB {
         db = mongo.getDB("MoviesLens");
     }
 
-
-    public Integer getNbMovies(){
-        table = db.getCollection("movies");
-        DBCursor cursor = table.find();
-        return cursor.count();
-    }
-
     public ArrayList<Movie> getAllMoviesByUserId(Integer idUser){
 
 
@@ -32,16 +25,21 @@ public class MongoDB {
         BasicDBObject whereQuery = new BasicDBObject();
         whereQuery.put("_id", idUser);
         DBCursor cursor = table.find(whereQuery);
+        DBObject object = cursor.next();
+        System.out.println(object.get("movies"));
+        System.out.println(object.get("movies").getClass());
+        BasicDBList ratings = (BasicDBList) object.get("movies");
+        for (int i=0;i<ratings.size();i++) {
+            list.add(getMovieById(Integer.parseInt(((BasicDBObject)ratings.get(i)).get("movieid").toString())));
+        }
 
+        /*
         while(cursor.hasNext()) {
             DBObject object = cursor.next();
-            System.out.println(((ArrayList) object.get("movies")).size());
-            for (Object genre: (ArrayList) object.get("movies")
-                    ) {
-
-                System.out.println(genre);
+            for (Object movie: (ArrayList) object.get("movies")) {
+                list.add(getMovieById(movie.get("movieid")));
             }
-        }
+        }*/
 
         return list;
     }
@@ -59,14 +57,17 @@ public class MongoDB {
         return list;
     }
 
-    /*public Movie getMovieById(int idMovie){
+    public Movie getMovieById(int idMovie){
+        List<Genre> genres = new ArrayList<Genre>();
         table = db.getCollection("movies");
         BasicDBObject whereQuery = new BasicDBObject();
         whereQuery.put("_id", idMovie);
         table = db.getCollection("movies");
+        DBCursor cursor = table.find();
+        DBObject object = cursor.next();
+        return new Movie(Integer.parseInt(object.get("_id").toString()),object.get("title").toString(),genres);
 
-
-    }*/
+    }
 
 }
 

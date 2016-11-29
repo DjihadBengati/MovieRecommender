@@ -49,20 +49,12 @@ public class MainController {
             System.out.println("show all Movies");
 		}
 		else {
-			moviesMongoDB = mongodb.getAllMoviesByUserId(userId);
-
-			//TODO : Change mysql.getAllMovies(); to mysql.getAllMoviesByUserId(userId)
-			moviesMySQL = mysql.getAllMovies();
-            //TODO : Change neo4j.getAllMovies(); to neo4j.getAllMoviesByUserId(userId)
-            moviesNeo4J = neo4j.getAllMovies();
+			moviesMongoDB = mongodb.getAllMovies();
+			moviesMySQL = mysql.getMoviesByUserId(userId);
+            moviesNeo4J = neo4j.getMoviesByUserId(userId);
             System.out.println("show Movies of user " + userId);
 		}
 
-
-
-
-		// TODO: write query to retrieve all movies from DB or all movies rated by user with id userId,
-		// depending on whether or not a value was given for userId
 
 		ModelAndView mv = new ModelAndView("movies");
 		mv.addObject("userId", userId);
