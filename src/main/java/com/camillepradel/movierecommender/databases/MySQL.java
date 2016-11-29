@@ -8,7 +8,6 @@ import com.camillepradel.movierecommender.model.Movie;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
 public class MySQL {
     private String url = "jdbc:mysql://localhost:3306/movielens";
     public String getUrl(){
