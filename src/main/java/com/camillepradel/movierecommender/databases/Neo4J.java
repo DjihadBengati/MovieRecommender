@@ -38,18 +38,6 @@ public class Neo4J {
         return list;
     }
 
-    public  ArrayList<Movie> getMoviesByUserId(int userId){
-        ArrayList<Movie> list = new ArrayList<Movie>();
-        List<Genre> genres = new ArrayList<Genre>();
-        StatementResult result = session.run( "MATCH (n:User {id:"+userId+"})-[r]->(m:Movie) RETURN m.title AS title, m.id AS id" );
-        while ( result.hasNext() )
-        {
-            Record record = result.next();
-            list.add(new Movie(record.get( "id" ).asInt(),record.get( "title" ).asString(),genres));
-        }
-        return list;
-    }
-
     public void close(){
         session.close();
         driver.close();
