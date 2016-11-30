@@ -74,6 +74,24 @@ public class MySQL {
         return list;
     }
 
+    public ArrayList<Movie> getMoviesByUserId(int userId){
+                List<Genre> genres = new ArrayList<Genre>();
+                ArrayList<Movie> list = new ArrayList<Movie>();
+
+                        String query = "SELECT movie.title, movie.id FROM movie , ratings WHERE ratings.id_user="+userId+" AND ratings.id_movie=movie.id";
+                try{
+                        rs = st.executeQuery(query);
+                        while(rs.next()){
+                                list.add(new Movie(rs.getShort("id"),rs.getString("title"),genres));
+                            }
+                   }catch(SQLException e){
+                        e.printStackTrace();
+                    }
+
+
+                               return list;
+            }
+
     public void close(){
         try{
             cn.close();
