@@ -3,7 +3,26 @@ package com.camillepradel.movierecommender.databases;
 
 import com.camillepradel.movierecommender.model.Genre;
 import com.camillepradel.movierecommender.model.Movie;
+import com.camillepradel.movierecommender.model.Rating;
 import com.mongodb.*;
+import org.bson.Document;
+import com.mongodb.AggregationOutput;
+import com.mongodb.BasicDBList;
+import com.mongodb.BasicDBObject;
+import com.mongodb.client.AggregateIterable;
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
+import com.mongodb.client.MongoDatabase;
+import static com.mongodb.client.model.Filters.eq;
+import com.mongodb.client.model.UpdateOptions;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import org.bson.Document;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,16 +37,7 @@ public class MongoDB {
         db = mongo.getDB("MoviesLens");
     }
 
-
-    public Integer getNbMovies(){
-        table = db.getCollection("movies");
-        DBCursor cursor = table.find();
-        return cursor.count();
-    }
-
     public ArrayList<Movie> getAllMoviesByUserId(Integer idUser){
-
-
         table = db.getCollection("users");
         ArrayList<Movie> list = new ArrayList<Movie>() ;
         BasicDBObject whereQuery = new BasicDBObject();
@@ -36,11 +46,8 @@ public class MongoDB {
 
         while(cursor.hasNext()) {
             DBObject object = cursor.next();
-            System.out.println(((ArrayList) object.get("movies")).size());
             ArrayList<BasicDBObject> movies = (ArrayList<BasicDBObject>) object.get("movies");
-            System.out.println(movies);
             for (BasicDBObject movie: movies) {
-                System.out.println(movie);
                 list.add(getMovieById(Integer.parseInt(movie.get("movieid").toString())));
             }
         }
@@ -56,7 +63,6 @@ public class MongoDB {
             DBObject object = cursor.next();
             list.add(new Movie(Integer.parseInt(object.get("_id").toString()),object.get("title").toString(),genres));
         }
-
         return list;
     }
 
@@ -68,9 +74,184 @@ public class MongoDB {
         table = db.getCollection("movies");
         DBCursor cursor = table.find(whereQuery);
         DBObject object = cursor.next();
-        System.out.println(object.get("title").toString());
-
         return new Movie(Integer.parseInt(object.get("_id").toString()),object.get("title").toString(),genres);
+    }
+
+
+    public ArrayList<Rating> getRatingByIdUser(int idUser){
+        ArrayList<Rating> list = new ArrayList<Rating>();
+        table = db.getCollection("users");
+        BasicDBObject whereQuery = new BasicDBObject();
+        whereQuery.put("_id", idUser);
+        DBCursor cursor = table.find(whereQuery);
+        while(cursor.hasNext()) {
+            DBObject object = cursor.next();
+            ArrayList<BasicDBObject> movies = (ArrayList<BasicDBObject>) object.get("movies");
+            for (BasicDBObject movie: movies) {
+                list.add(new Rating(getMovieById(Integer.parseInt(movie.get("movieid").toString())),
+                        idUser,Integer.parseInt(movie.get("rating").toString())));
+            }
+        }
+        return list;
+    }
+
+    public Boolean isRated( int userId,long movieId){
+        Boolean israted = false;
+        table = db.getCollection("users");
+        BasicDBObject whereQuery = new BasicDBObject();
+        whereQuery.put("_id",userId);
+        DBCursor cursor = table.find(whereQuery);
+        while (cursor.hasNext()){
+            DBObject object = cursor.next();
+            ArrayList<BasicDBObject> movies = (ArrayList<BasicDBObject>) object.get("movies");
+            for (BasicDBObject movie: movies) {
+                if (Integer.parseInt(movie.get("movieid").toString())==movieId){
+                    israted=true;
+                }
+            }
+        }
+        return israted;
+    }
+
+    public void updateMovieRating(Rating rating) {
+        ArrayList<Rating> listRating= new  ArrayList<Rating>();
+        MongoCursor<Document> cursor;
+
+        MongoDatabase data = mongo.getDatabase("MoviesLens");
+        MongoCollection<Document> users = data.getCollection("users");
+
+        BasicDBObject updateQuery = new BasicDBObject();
+        BasicDBObject newDocument = new BasicDBObject();
+        BasicDBObject deleteDocument = new BasicDBObject();
+
+        deleteDocument.append("$pull", new BasicDBObject()
+                .append("movies", new BasicDBObject()
+                        .append("movieid", rating.getMovieId())
+                )
+        );
+
+        newDocument.append("$push", new BasicDBObject()
+                .append("movies", new BasicDBObject()
+                        .append("movieid", rating.getMovieId())
+                        .append("rating", rating.getScore())
+                        .append("timestamp", (int) (new Date().getTime()/1000))
+                )
+        );
+
+        BasicDBObject searchQuery = new BasicDBObject()
+                .append("_id", rating.getUserId());
+
+        FindIterable<Document> movie = users.find(searchQuery);
+
+
+        users.updateOne(searchQuery,deleteDocument);
+        users.updateOne(searchQuery, newDocument);
+
+    }
+
+    public ArrayList<Rating> recommandations(int userId){
+
+        MongoDatabase data = mongo.getDatabase("MoviesLens");
+        MongoCollection<Document> users = data.getCollection("users");
+
+        BasicDBObject project;
+        BasicDBObject match;
+        BasicDBObject sort;
+        BasicDBObject limit;
+        BasicDBObject unwind;
+        BasicDBObject group;
+
+        project = new BasicDBObject("$project",
+                new BasicDBObject("moviesid", "$movies.movieid")
+        );
+
+        match = new BasicDBObject("$match",
+                new BasicDBObject("_id", new BasicDBObject("$eq", userId))
+        );
+
+        AggregateIterable<Document> output = users.aggregate(Arrays.asList(project, match));
+
+        final Document moviesid = output.first();
+
+        BasicDBList intersectionList = new BasicDBList();
+        intersectionList.add("$movies.movieid" );
+        intersectionList.add( moviesid.get("moviesid") );
+
+        project = new BasicDBObject("$project",
+                new BasicDBObject("nbMoviesIntersect",
+                        new BasicDBObject("$size",
+                                new BasicDBObject("$setIntersection",
+                                        intersectionList
+                                )
+                        )
+                )
+        );
+
+        match = new BasicDBObject("$match",
+                new BasicDBObject("_id", new BasicDBObject("$ne", userId))
+        );
+
+        sort = new BasicDBObject("$sort",
+                new BasicDBObject("nbMoviesIntersect", -1)
+        );
+
+        limit = new BasicDBObject("$limit", 5);
+
+        output = users.aggregate(Arrays.asList(project, match, sort, limit));
+
+        Document simUser = output.first();
+
+        unwind = new BasicDBObject("$unwind", "$movies");
+
+        match = new BasicDBObject("$match",
+                new BasicDBObject()
+                        .append("_id", simUser.getInteger("_id"))
+                        .append("movies.movieid", new BasicDBObject("$nin", moviesid.get("moviesid")))
+        );
+
+        group = new BasicDBObject("$group",  new BasicDBObject()
+                .append("movies", new BasicDBObject("$push", "$movies"))
+        );
+
+        sort = new BasicDBObject("$sort", new BasicDBObject("movies.rating",  -1));
+
+        output = users.aggregate(Arrays.asList(unwind, match, sort, group));
+
+        Document listMoviesDiff = output.first();
+
+
+        ArrayList<Rating> listRating= new  ArrayList<Rating>();
+        MongoCollection<Document> movies = data.getCollection("movies");
+        MongoCursor<Document> cursor;
+
+        ArrayList<Document> user_movies = (ArrayList) listMoviesDiff.get("movies");
+        BasicDBObject inQuery = new BasicDBObject();
+        HashMap<Integer,Integer> list = new HashMap<Integer,Integer>();
+        for(Document movie : user_movies )
+            list.put(movie.getInteger("movieid"), movie.getInteger("rating"));
+
+        inQuery.put("_id", new BasicDBObject("$in", list.keySet()));
+        cursor = movies.find(inQuery).iterator();
+
+        HashMap<Integer,Rating> hashMoviesRating = new HashMap<Integer,Rating>();
+        while (cursor.hasNext()) {
+            Document movie = cursor.next();
+            String[] genres;
+            genres = movie.getString("genres").split("\\|");
+            ArrayList<Genre> listGenres = new ArrayList<Genre>();
+            for(String genre : genres){
+                listGenres.add(new Genre(1,genre));
+            }
+            hashMoviesRating.put(movie.getInteger("_id"),
+                    new Rating(new Movie(movie.getInteger("_id"), movie.getString("title"), listGenres),
+                            userId, list.get(movie.getInteger("_id"))));
+
+        }
+
+        for(Document movie : user_movies )
+            listRating.add(hashMoviesRating.get(movie.getInteger("movieid")));
+
+        return listRating;
     }
 
 }

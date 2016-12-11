@@ -25,4 +25,9 @@ public class Movie {
     public List<Genre> getGenres() {
         return this.genres;
     }
+
+    public Boolean equals(Movie movie){
+        if(this.id==movie.getId() && this.title==movie.getTitle()) return true;
+        else return false;
+    }
 }

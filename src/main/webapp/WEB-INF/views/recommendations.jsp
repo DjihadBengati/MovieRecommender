@@ -18,6 +18,26 @@
         </li>
     </c:forEach>
 </ul>
+<h1>
+    Vos recommandations Neo4J
+</h1>
+<ul>
+    <c:forEach items="${recommendationsNeo4j}" var="recommendation">
+        <li>
+                ${recommendation.getMovie().title}
+        </li>
+    </c:forEach>
+</ul>
+<!--<h1>
+    Vos recommandations MongoDB
+</h1>
+<ul>
+    <c:forEach items="${recommendationsMongoDB}" var="recommendation">
+        <li>
+                ${recommendation.getMovie().title}
+        </li>
+    </c:forEach>
+</ul>-->
 
 </body>
 </html>

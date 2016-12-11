@@ -63,9 +63,6 @@ public class MainController {
 		}
 
 
-
-
-
 		ModelAndView mv = new ModelAndView("movies");
 		mv.addObject("userId", userId);
 		mv.addObject("moviesMongoDB", moviesMongoDB);
@@ -88,50 +85,72 @@ public class MainController {
 			@RequestParam(value = "user_id", required = true) Integer userId) {
 		System.out.println("GET /movieratings for user " + userId);
 
-		// TODO: write query to retrieve all movies from DB
-		List<Movie> allMovies = new LinkedList<Movie>();
-		Genre genre0 = new Genre(0, "genre0");
-		Genre genre1 = new Genre(1, "genre1");
-		Genre genre2 = new Genre(2, "genre2");
-		allMovies.add(new Movie(0, "Titre 0", Arrays.asList(new Genre[] {genre0, genre1})));
-		allMovies.add(new Movie(1, "Titre 1", Arrays.asList(new Genre[] {genre0, genre2})));
-		allMovies.add(new Movie(2, "Titre 2", Arrays.asList(new Genre[] {genre1})));
-		allMovies.add(new Movie(3, "Titre 3", Arrays.asList(new Genre[] {genre0, genre1, genre2})));
+		mongodb = new MongoDB();
+		neo4j = new Neo4J();
 
-		// TODO: write query to retrieve all ratings from the specified user
-		List<Rating> ratings = new LinkedList<Rating>();
-		ratings.add(new Rating(new Movie(0, "Titre 0", Arrays.asList(new Genre[] {genre0, genre1})), userId, 3));
-		ratings.add(new Rating(new Movie(2, "Titre 2", Arrays.asList(new Genre[] {genre1})), userId, 4));
+		List<Rating> ratingsMongoDB = mongodb.getRatingByIdUser(userId);
+		List<Rating> ratingsNeo4j = neo4j.getRatingByIdUser(userId);
+		List<Movie> allMoviesMongoDB = mongodb.getAllMovies();
+		List<Movie> allMoviesNeo4j = neo4j.getAllMovies();
+
 
 		ModelAndView mv = new ModelAndView("movieratings");
 		mv.addObject("userId", userId);
-		mv.addObject("allMovies", allMovies);
-		mv.addObject("ratings", ratings);
 
+
+        mv.addObject("ratingsMongoDB",ratingsMongoDB);
+        mv.addObject("ratingsNeo4j",ratingsNeo4j);
+        mv.addObject("ratingsMongoDBNbr",ratingsMongoDB.size());
+        mv.addObject("ratingsNeo4jNbr",ratingsNeo4j.size());
+
+
+        mv.addObject("roRateNeo4j",allMoviesNeo4j);
+        mv.addObject("roRateMongoDB",allMoviesMongoDB);
+        mv.addObject("roRateNeo4jNb",allMoviesNeo4j.size());
+        mv.addObject("roRateMongoDBNb",allMoviesMongoDB.size());
+
+
+		neo4j.close();
 		return mv;
 	}
 
-	@RequestMapping(value = "/movieratings", method = RequestMethod.POST)
-	public String saveOrUpdateRating(@ModelAttribute("rating") Rating rating) {
-		System.out.println("POST /movieratings for user " + rating.getUserId()
+	@RequestMapping(value = "/movieratings/mongodb", method = RequestMethod.POST)
+	public String saveOrUpdateRatingMongodb(@ModelAttribute("rating") Rating rating) {
+		System.out.println("POST /movieratings/mongodb for user " + rating.getUserId()
 				+ ", movie " + rating.getMovie().getId()
 				+ ", score " + rating.getScore());
+		mongodb = new MongoDB();
 
-		// TODO: add query which
-		//         - add rating between specified user and movie if it doesn't exist
-		//         - update it if it does exist
+		mongodb.updateMovieRating(rating);
 
 		return "redirect:/movieratings?user_id=" + rating.getUserId();
 	}
+    @RequestMapping(value = "/movieratings/neo4j", method = RequestMethod.POST)
+    public String saveOrUpdateRatingNeo4j(@ModelAttribute("rating") Rating rating) {
+        System.out.println("POST /movieratings/neo4j for user " + rating.getUserId()
+                + ", movie " + rating.getMovie().getId()
+                + ", score " + rating.getScore());
+        neo4j = new Neo4J();
+        if(neo4j.isRated(rating.getUserId(),rating.getMovie().getId())){
+                neo4j.editRate(rating.getUserId(),rating.getMovieId(),rating.getScore());
+        }else{
+				neo4j.createRate(rating.getUserId(),rating.getMovieId(),rating.getScore());
+        }
+        neo4j.close();
+        return "redirect:/movieratings?user_id=" + rating.getUserId();
+    }
 
 	@RequestMapping(value = "/recommendations", method = RequestMethod.GET)
 	public ModelAndView ProcessRecommendations(
 			@RequestParam(value = "user_id", required = true) Integer userId,
 			@RequestParam(value = "processing_mode", required = false, defaultValue = "0") Integer processingMode){
-		System.out.println("GET /movieratings for user " + userId);
+		System.out.println("GET /recommendations for user " + userId);
 
-		// TODO: process recommendations for specified user exploiting other users ratings
-		//       use different methods depending on processingMode parameter
+
+		neo4j = new Neo4J();
+		mongodb = new MongoDB();
+		List<Rating> recommendationsNeo4j = neo4j.recommandations(userId);
+		//List<Rating> recommendationsMongoDB = mongodb.recommandations(userId);
 		Genre genre0 = new Genre(0, "genre0");
 		Genre genre1 = new Genre(1, "genre1");
 		Genre genre2 = new Genre(2, "genre2");
@@ -152,6 +171,8 @@ public class MainController {
 
 		ModelAndView mv = new ModelAndView("recommendations");
 		mv.addObject("recommendations", recommendations);
+		mv.addObject("recommendationsNeo4j", recommendationsNeo4j);
+		//mv.addObject("recommendationsMongoDB", recommendationsMongoDB);
 
 		return mv;
 	}

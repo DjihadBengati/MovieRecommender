@@ -25,7 +25,7 @@
 	        Tous les films
 	    </c:when>    
 	    <c:otherwise>
-	        Films de l'utilisateur ${userId}
+	        Films de l'utilisateur ${userId} - <a href="movieratings?user_id=${userId}"><span class="glyphicon glyphicon-star" aria-hidden="true"></span> Evaluer des films</a> - <a href="recommendations?user_id=${userId}"><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> Nos recommandations</a>
 	    </c:otherwise>
 	</c:choose>
 </h1></center>
