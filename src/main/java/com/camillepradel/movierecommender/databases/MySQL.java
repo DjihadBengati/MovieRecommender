@@ -60,6 +60,7 @@ public class MySQL {
     }
 
     public ArrayList<Movie> getAllMovies(){
+        long startTime = System.nanoTime();
         List<Genre> genres = new ArrayList<Genre>();
         ArrayList<Movie> list = new ArrayList<Movie>();
         String query = "SELECT * FROM movie";
@@ -71,6 +72,8 @@ public class MySQL {
         }catch(SQLException e){
             e.printStackTrace();
         }
+        long endTime = System.nanoTime();
+        //System.out.println("getAllMovies MySQL : "+((double)(endTime-startTime)/1000000000.0));
         return list;
     }
 

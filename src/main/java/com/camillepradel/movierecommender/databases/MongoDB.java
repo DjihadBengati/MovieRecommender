@@ -6,7 +6,6 @@ import com.camillepradel.movierecommender.model.Movie;
 import com.camillepradel.movierecommender.model.Rating;
 import com.mongodb.*;
 import org.bson.Document;
-import com.mongodb.AggregationOutput;
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.client.AggregateIterable;
@@ -14,17 +13,10 @@ import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
-import static com.mongodb.client.model.Filters.eq;
-import com.mongodb.client.model.UpdateOptions;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
-import org.bson.Document;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class MongoDB {
@@ -55,6 +47,7 @@ public class MongoDB {
     }
 
     public ArrayList<Movie> getAllMovies(){
+        long startTime = System.nanoTime();
         List<Genre> genres = new ArrayList<Genre>();
         ArrayList<Movie> list = new ArrayList<Movie>();
         table = db.getCollection("movies");
@@ -63,6 +56,8 @@ public class MongoDB {
             DBObject object = cursor.next();
             list.add(new Movie(Integer.parseInt(object.get("_id").toString()),object.get("title").toString(),genres));
         }
+        long endTime = System.nanoTime();
+        //System.out.println("getAllMovies MongoDB : "+((double)(endTime-startTime)/1000000000.0));
         return list;
     }
 

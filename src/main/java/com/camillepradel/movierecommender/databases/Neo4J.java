@@ -43,19 +43,19 @@ public class Neo4J {
                 +" SET r.note="+nouvelleNote+", r.timestamp="+timestamp);
     }
 
-
-
     public ArrayList<Movie> getAllMovies(){
+        long startTime = System.nanoTime();
+
         ArrayList<Movie> list = new ArrayList<Movie>();
         List<Genre> genres = new ArrayList<Genre>();
-
-
         StatementResult result = session.run( "MATCH (m:Movie) RETURN m.title AS title, m.id AS id" );
         while ( result.hasNext() )
         {
             Record record = result.next();
             list.add(new Movie(record.get( "id" ).asInt(),record.get( "title" ).asString(),genres));
         }
+        long endTime = System.nanoTime();
+        //System.out.println("getAllMovies Neo4J : "+((double)(endTime-startTime)/1000000000.0));
         return list;
     }
 
